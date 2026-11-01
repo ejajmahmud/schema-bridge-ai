@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "schema-bridge-ai"
+version = "0.1.0"
+description = "Universal lossless tool & function declaration transpiler across OpenAI, Anthropic, Gemini, and MCP"
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "MIT"}
+authors = [
+    {name = "Ejaj Mahmud", email = "dev@ejajmahmud.com"}
+]
+keywords = ["tool-use", "function-calling", "mcp", "openai", "gemini", "anthropic", "schema-transpiler"]
+dependencies = []
+
+[project.scripts]
+schema-bridge = "schema_bridge_ai.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["schema_bridge_ai*"]

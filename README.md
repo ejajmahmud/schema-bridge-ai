@@ -1,0 +1,97 @@
+# Schema Bridge AI 🌉
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/)
+[![MCP Ready](https://img.shields.io/badge/Model%20Context%20Protocol-Compatible-brightgreen.svg)]()
+
+**Schema Bridge AI** is a universal, lossless tool and function declaration transpiler across modern AI ecosystems:
+- **Model Context Protocol (MCP)** (`inputSchema`)
+- **Google Gemini** (`parameters` with uppercase types: `STRING`, `OBJECT`, `INTEGER`, etc.)
+- **OpenAI** (`type: "function"`, `parameters`)
+- **Anthropic Claude** (`input_schema`)
+
+---
+
+## ⚡ The Problem
+
+Building multi-agent or multi-provider systems forces developers to write boilerplate converters for tool definitions:
+- Gemini rejects standard JSON lowercase `string`/`integer` types.
+- MCP uses `inputSchema` directly on the tool object.
+- OpenAI nests schemas under `function.parameters`.
+- Anthropic requires top-level `input_schema`.
+
+**Schema Bridge AI** provides bidirectional, lossless conversion with full type normalization in Python or via CLI.
+
+---
+
+## 📦 Installation
+
+```bash
+git clone https://github.com/ejajmahmud/schema-bridge-ai.git
+cd schema-bridge-ai
+pip install -e .
+```
+
+---
+
+## 🚀 Quick Usage
+
+### Python SDK
+
+```python
+from schema_bridge_ai import convert_tool
+
+mcp_tool = {
+    "name": "calculate_tax",
+    "description": "Calculates sales tax",
+    "inputSchema": {
+        "type": "object",
+        "properties": {
+            "amount": {"type": "number"},
+            "state": {"type": "string"}
+        },
+        "required": ["amount", "state"]
+    }
+}
+
+# Convert MCP tool directly to Gemini format
+gemini_tool = convert_tool(mcp_tool, source_format="mcp", target_format="gemini")
+print(gemini_tool)
+# Output:
+# {
+#   "name": "calculate_tax",
+#   "description": "Calculates sales tax",
+#   "parameters": {
+#     "type": "OBJECT",
+#     "properties": {
+#       "amount": {"type": "NUMBER"},
+#       "state": {"type": "STRING"}
+#     },
+#     "required": ["amount", "state"]
+#   }
+# }
+```
+
+### CLI Command
+
+```bash
+# Convert an MCP tool list to OpenAI format
+schema-bridge tools_mcp.json --from mcp --to openai -o tools_openai.json
+
+# Convert OpenAI functions to Gemini format
+schema-bridge functions.json --from openai --to gemini -o gemini_tools.json
+```
+
+---
+
+## 🧪 Testing
+
+```bash
+python -m unittest discover -s tests
+```
+
+---
+
+## 📄 License
+
+MIT © [Ejaj Mahmud](https://github.com/ejajmahmud)
