@@ -1,0 +1,12 @@
+LICENSE
+README.md
+pyproject.toml
+schema_bridge_ai/__init__.py
+schema_bridge_ai/cli.py
+schema_bridge_ai/converter.py
+schema_bridge_ai.egg-info/PKG-INFO
+schema_bridge_ai.egg-info/SOURCES.txt
+schema_bridge_ai.egg-info/dependency_links.txt
+schema_bridge_ai.egg-info/entry_points.txt
+schema_bridge_ai.egg-info/top_level.txt
+tests/test_converter.py

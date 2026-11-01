@@ -1,8 +1,16 @@
 # Schema Bridge AI 🌉
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/)
-[![MCP Ready](https://img.shields.io/badge/Model%20Context%20Protocol-Compatible-brightgreen.svg)]()
+<p align="center">
+  <img src="assets/architecture.svg" alt="Schema Bridge AI Universal Transpiler" width="100%">
+</p>
+
+<p align="center">
+  <a href="https://github.com/ejajmahmud/schema-bridge-ai/releases"><img src="https://img.shields.io/github/v/release/ejajmahmud/schema-bridge-ai?color=blue&label=version" alt="GitHub release"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT"></a>
+  <a href="https://www.python.org/"><img src="https://img.shields.io/badge/python-3.9+-3776AB.svg?style=flat&logo=python&logoColor=white" alt="Python 3.9+"></a>
+  <a href="https://modelcontextprotocol.io/"><img src="https://img.shields.io/badge/MCP-Compatible-10b981.svg" alt="MCP Compatible"></a>
+  <a href="https://github.com/ejajmahmud/schema-bridge-ai/actions"><img src="https://img.shields.io/badge/tests-passing-brightgreen.svg" alt="Tests"></a>
+</p>
 
 **Schema Bridge AI** is a universal, lossless tool and function declaration transpiler across modern AI ecosystems:
 - **Model Context Protocol (MCP)** (`inputSchema`)
@@ -12,15 +20,34 @@
 
 ---
 
-## ⚡ The Problem
+## ⚡ Universal Translation Topology
 
-Building multi-agent or multi-provider systems forces developers to write boilerplate converters for tool definitions:
-- Gemini rejects standard JSON lowercase `string`/`integer` types.
-- MCP uses `inputSchema` directly on the tool object.
-- OpenAI nests schemas under `function.parameters`.
-- Anthropic requires top-level `input_schema`.
+```mermaid
+graph TD
+    MCP["Model Context Protocol (MCP)<br/>inputSchema"] <--> SB(("⚡ Schema Bridge<br/>Normalization Engine"))
+    GEM["Google Gemini API<br/>parameters (OBJECT, STRING)"] <--> SB
+    OAI["OpenAI Tool Call<br/>function.parameters"] <--> SB
+    ANT["Anthropic Claude<br/>input_schema"] <--> SB
 
-**Schema Bridge AI** provides bidirectional, lossless conversion with full type normalization in Python or via CLI.
+    style SB fill:#111827,stroke:#10b981,stroke-width:3px,color:#34d399
+    style MCP fill:#1e293b,stroke:#38bdf8,stroke-width:2px,color:#fff
+    style GEM fill:#1e293b,stroke:#818cf8,stroke-width:2px,color:#fff
+    style OAI fill:#1e293b,stroke:#10b981,stroke-width:2px,color:#fff
+    style ANT fill:#1e293b,stroke:#f59e0b,stroke-width:2px,color:#fff
+```
+
+---
+
+## 📊 Type Mapping Matrix
+
+| Abstract Type | Standard JSON / MCP | Google Gemini SDK | OpenAI Function | Anthropic Claude |
+|---|---|---|---|---|
+| String | `"type": "string"` | `"type": "STRING"` | `"type": "string"` | `"type": "string"` |
+| Integer | `"type": "integer"` | `"type": "INTEGER"` | `"type": "integer"` | `"type": "integer"` |
+| Float / Number | `"type": "number"` | `"type": "NUMBER"` | `"type": "number"` | `"type": "number"` |
+| Boolean | `"type": "boolean"` | `"type": "BOOLEAN"` | `"type": "boolean"` | `"type": "boolean"` |
+| Object | `"type": "object"` | `"type": "OBJECT"` | `"type": "object"` | `"type": "object"` |
+| Array | `"type": "array"` | `"type": "ARRAY"` | `"type": "array"` | `"type": "array"` |
 
 ---
 
@@ -34,7 +61,7 @@ pip install -e .
 
 ---
 
-## 🚀 Quick Usage
+## 🚀 Quickstart
 
 ### Python SDK
 
@@ -54,22 +81,9 @@ mcp_tool = {
     }
 }
 
-# Convert MCP tool directly to Gemini format
+# Convert MCP tool directly to Gemini format with uppercase type normalization
 gemini_tool = convert_tool(mcp_tool, source_format="mcp", target_format="gemini")
 print(gemini_tool)
-# Output:
-# {
-#   "name": "calculate_tax",
-#   "description": "Calculates sales tax",
-#   "parameters": {
-#     "type": "OBJECT",
-#     "properties": {
-#       "amount": {"type": "NUMBER"},
-#       "state": {"type": "STRING"}
-#     },
-#     "required": ["amount", "state"]
-#   }
-# }
 ```
 
 ### CLI Command
@@ -84,7 +98,7 @@ schema-bridge functions.json --from openai --to gemini -o gemini_tools.json
 
 ---
 
-## 🧪 Testing
+## 🧪 Running Tests
 
 ```bash
 python -m unittest discover -s tests

@@ -1,0 +1,2 @@
+[console_scripts]
+schema-bridge = schema_bridge_ai.cli:main
